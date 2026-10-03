@@ -13,13 +13,13 @@ load_dotenv()
 YANDEX_CALDAV_URL = os.getenv("YANDEX_CALDAV_URL", "https://caldav.yandex.ru")
 YANDEX_USERNAME = os.getenv("YANDEX_USERNAME")
 YANDEX_PASSWORD = os.getenv("YANDEX_PASSWORD")
-MCP_HOST = os.getenv("MCP_HOST", "0.0.0.0")
+MCP_HOST = os.getenv("MCP_HOST", "127.0.0.1")
 
 mcp = FastMCP(
     name="yandex-calendar",
     host=MCP_HOST,
     port=8088,
-    log_level="DEBUG",
+    log_level="INFO",
 )
 
 calendar_event = YandexCalendar(
@@ -66,7 +66,7 @@ async def get_upcoming_events(
     except Exception as e:
         error_msg = f"Ошибка при получении событий: {str(e)}"
         if ctx:
-            ctx.error(error_msg)
+            await ctx.error(error_msg)
         return error_msg
 
 
@@ -99,7 +99,7 @@ async def create_calendar_event(
     if not calendar_event.caldav_calendar:
         error_msg = "Ошибка: не удалось подключиться к Яндекс Календарю. Проверьте учетные данные."
         if ctx:
-            ctx.error(error_msg)
+            await ctx.error(error_msg)
         return error_msg
 
     try:
@@ -151,7 +151,7 @@ async def delete_calendar_event(event_uid: str, ctx: Context = None) -> str:
     if not calendar_event.caldav_calendar:
         error_msg = "Ошибка: не удалось подключиться к Яндекс Календарю. Проверьте учетные данные."
         if ctx:
-            ctx.error(error_msg)
+            await ctx.error(error_msg)
         return error_msg
 
     try:
