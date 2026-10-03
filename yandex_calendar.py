@@ -140,7 +140,7 @@ UID:{event_uid}
 END:VEVENT
 END:VCALENDAR"""
         try:
-            self.caldav_calendar.add_event(ical)
+            await asyncio.to_thread(self.caldav_calendar.add_event, ical)
             return f"Событие '{title}' успешно создано"
         except Exception as e:
             return f"Ошибка создания события: {str(e)}"
